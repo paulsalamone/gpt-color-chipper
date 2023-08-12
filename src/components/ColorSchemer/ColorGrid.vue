@@ -1,37 +1,44 @@
 <template>
   <!-- <div>{{ apiResponse1 }}</div> -->
   <div>
-    <h2>{{ promptText }}</h2>
-    <div class="b-colorgrid" v-if="r">
-      <div class="b-colorgrid__left">
+    <!-- {{ apiResponse }}} -->
+    <!-- <h2>{{ promptText }}</h2> -->
+    <div class="b-colorgrid" v-if="response">
+      <div class="b-colorgrid__cell" v-for="(cell, index) in response" :key="index">
+        <div class="b-colorgrid__cell_color" :style="{ backgroundColor: cell.hex }"></div>
+        <p class="b-colorgrid__cell_name">{{ cell.name }}</p>
+        <p class="b-colorgrid__cell_hex">{{ cell.hex }}</p>
+      </div>
+
+      <!-- REPLACE WITH V-FOR -->
+
+      <!-- OLD SHIT -->
+      <!-- <div class="b-colorgrid__left">
         <div
           class="b-colorgrid__left-main b-colorgrid__cell"
           :style="{ backgroundColor: r.color1.hex }"
         >
-          <p>{{ r.color1.word }}</p>
+          <p>{{ r.color1.name }}</p>
         </div>
-      </div>
-      <div class="b-colorgrid__right">
+      </div> -->
+      <!-- <div class="b-colorgrid__right">
         <div class="b-colorgrid__right-secondaries">
           <div class="b-colorgrid__cell" :style="{ backgroundColor: r.color2.hex }">
-            <p>{{ r.color2.word }}</p>
+            <p>{{ r.color2.name }}</p>
           </div>
           <div class="b-colorgrid__cell" :style="{ backgroundColor: r.color3.hex }">
-            <p>{{ r.color3.word }}</p>
+            <p>{{ r.color3.name }}</p>
           </div>
         </div>
         <div class="b-colorgrid__right-tertiaries">
           <div class="b-colorgrid__cell" :style="{ backgroundColor: r.color4.hex }">
-            <p>{{ r.color4.word }}</p>
+            <p>{{ r.color4.name }}</p>
           </div>
           <div class="b-colorgrid__cell" :style="{ backgroundColor: r.color5.hex }">
-            <p>{{ r.color5.word }}</p>
-          </div>
-          <div class="b-colorgrid__cell" :style="{ backgroundColor: r.color6.hex }">
-            <p>{{ r.color6.word }}</p>
+            <p>{{ r.color5.name }}</p>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -48,27 +55,23 @@ const props = defineProps({
     default: `{
     "color1": {
         "hex": "#FF0000",
-        "word": "Red"
+        "name": "Red"
     },
     "color2": {
         "hex": "#FFFF00",
-        "word": "Yellow"
+        "name": "Yellow"
     },
     "color3": {
         "hex": "#00FF00",
-        "word": "Green"
+        "name": "Green"
     },
     "color4": {
         "hex": "#0000FF",
-        "word": "Blue"
+        "name": "Blue"
     },
     "color5": {
         "hex": "#000000",
-        "word": "Black"
-    },
-    "color6": {
-        "hex": "#003300",
-        "word": "Black"
+        "name": "Black"
     }
 }`
   },
@@ -77,38 +80,34 @@ const props = defineProps({
     default: `{
     "color1": {
         "hex": "#FF0000",
-        "word": "Red"
+        "name": "Red"
     },
     "color2": {
         "hex": "#FFFF00",
-        "word": "Yellow"
+        "name": "Yellow"
     },
     "color3": {
         "hex": "#00FF00",
-        "word": "Green"
+        "name": "Green"
     },
     "color4": {
         "hex": "#0000FF",
-        "word": "Blue"
+        "name": "Blue"
     },
     "color5": {
         "hex": "#000000",
-        "word": "Black"
-    },
-    "color6": {
-        "hex": "#003300",
-        "word": "Black"
+        "name": "Black"
     }
 }`
   }
 })
 
-const r = ref(JSON.parse(props.apiResponse))
+const response = ref(JSON.parse(props.apiResponse))
 
 watch(
   () => props.apiResponse,
   (newVal) => {
-    r.value = JSON.parse(newVal)
+    response.value = JSON.parse(newVal)
   },
   { immediate: true }
 )
@@ -116,68 +115,4 @@ watch(
 // console.log(r);
 </script>
 
-<style scoped lang="scss">
-h2 {
-  margin-bottom: 0;
-  color: white;
-  background-color: black;
-  padding: 5px 0 1px 15px;
-}
-.b-colorgrid {
-  border: 5px solid black;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr;
-  //   border: 1px dotted grey;
-  padding: 1rem;
-  height: 300px;
-  grid-gap: 1rem;
-  &__left {
-    display: grid;
-    grid-template-columns: 1fr;
-  }
-
-  &__right {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 3fr 2fr;
-    grid-gap: 1rem;
-
-    &-secondaries {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr;
-      grid-gap: 1rem;
-    }
-
-    &-tertiaries {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      grid-template-rows: 1fr;
-      grid-gap: 1rem;
-
-      div {
-        border: 15px solid white;
-      }
-    }
-  }
-
-  &__cell {
-    // color: red;
-    // border: 2px solid red;
-    display: flex;
-    align-items: flex-end;
-  }
-
-  p {
-    background-color: black;
-    color: white;
-    margin: 0;
-    padding: 2px 5px;
-  }
-
-  span {
-    color: red;
-  }
-}
-</style>
+<style scoped lang="scss" src="./color-grid.scss"></style>

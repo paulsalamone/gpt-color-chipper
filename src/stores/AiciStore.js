@@ -146,7 +146,7 @@ export const useAiciStore = defineStore('AiciStore', () => {
 
             //  <!-- [ [ "#FFCE54", "#F07818", "#F8E71C" ], [ "#F9D423", "#F5A623", "#F4D03F" ], [ "#F5AB35", "#F39C12", "#F9E79F" ] ] -->
 
-            olors
+
             //             :
             //             Array(3)
             //             0

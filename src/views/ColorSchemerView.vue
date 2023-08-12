@@ -1,13 +1,6 @@
 <template>
   <div>
-    <h2>COLOR SCHEMER!</h2>
-    <p>
-      This is a tool to help you generate color schemes based on words. It uses the OpenAI API to
-      generate color schemes based on words you enter. It returns a JSON object with six colors,
-      each with a hex code and a word associated with that color. You can use the hex codes to
-      generate a color scheme, and the words to help you name the colors.
-    </p>
-
+    <!-- <h2>COLOR SCHEMER!</h2> -->
     <form action="" @submit.prevent="handleSubmit()">
       <input type="text" v-model="promptText" placeholder="enter three words" />
       <button>submit</button>
@@ -52,61 +45,41 @@ const handleSubmit = () => {
   async function generateResponse() {
     console.log(import.meta.env.VITE_API_KEY)
     const configuration = new Configuration({
+      organization: 'org-fWYQwgBDSZLxrUyC3ERZrfWh',
       apiKey: import.meta.env.VITE_API_KEY
     })
 
     console.log(configuration)
     const openai = new OpenAIApi(configuration)
 
-    // These can be abstract concepts you associate with it, or colors related to objects, people, places, or things, connected with the prompt. It may be a color you see in photos of the prompt as well. (Remember this for all of the colors.)
-
-    const response = await openai.createCompletion({
-      model: 'text-davinci-003',
-      prompt: `Please return a JSON object with the following items (and please be sure that all keys and values are in double quotes):
-
-color1: an object containing two items: 
-1. hex: a hex color you associate with the term "${promptText.value}". 
-2. word: a word you associate with that hex color.
-
-color2: an object containing two items: 
-1. hex: a hex color you associate with the term "${promptText.value}"
-2. word: a word you associate with that hex color. 
-
-color3 an object containing two items: 
-1. hex: a hex color you associate with the term "${promptText.value}"
-2. word: a word you associate with that hex color. 
-
-color4: an object containing two items: 
-1. hex: a hex color you associate with the term "${promptText.value}"
-2. word: one word you associate with that hex color
-
-color5 an object containing two items: 
-1. hex: a hex color you associate with the term "${promptText.value}"
-2. word: a word you associate with that hex color
-
-color6 an object containing two items: 
-1. hex: a hex color you associate with the term "${promptText.value}"
-2. word: a word you associate with that hex color
-
-NOTE: feel free to use non-standard colors, such as pastels, or colors that are not in the standard 6-color palette. Also, the last three colors can adjacent colors, or brighter, darker, more saturated, or less saturated variations of the first colors. Just please don't repeat anything. And DO NOT use the name of a color as the word. For example, if you choose the color red, please don't use the word "red" as the word. Instead, use a word that you associate with the color red.
-`,
-
+    const response = await openai.createChatCompletion({
+      model: 'gpt-3.5-turbo',
+      messages: [
+        { role: 'system', content: 'Hello there, how may I assist you today?' },
+        {
+          role: 'user',
+          content: `Without additional commentary or explanation, please create only a RFC8259 compliant JSON object with five objects, each with the following properties:
+[{
+  "hex": "a hex color you associate with the term '${promptText.value}'.",
+  "name": "a two-word color name you associate with that hex color. Please use weirder, more unusual color names, i.e. 'seafoam sage' instead of 'green', or 'torrid magenta' instead of 'hot pink'. Do not repeat a name used in any of the other objects.",
+  "explanation": "An one-sentence explanation for why you chose that color and name.
+}]`
+        }
+      ],
       temperature: 0.1,
       max_tokens: 250
     })
 
-    apiResponse.value = response.data.choices[0].text.trim()
+    apiResponse.value = response.data.choices[0].message.content
+    console.log('API RESPONSE:', apiResponse.value)
 
-    apiResponseProp.value = response.data.choices[0].text.trim()
-
-    console.log(apiResponse.value)
+    apiResponseProp.value = apiResponse.value
 
     promptProp.value = promptText.value
 
     promptText.value = ''
     apiResponse.value = ''
 
-    console.log(apiResponseProp.value)
     loading.value = false
   }
 
