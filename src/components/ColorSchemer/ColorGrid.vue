@@ -2,7 +2,7 @@
   <!-- <div>{{ apiResponse1 }}</div> -->
   <div>
     <!-- {{ apiResponse }}} -->
-    <!-- <h2>{{ promptText }}</h2> -->
+    <h2>{{ promptText }}</h2>
     <div class="b-colorgrid" v-if="response">
       <div class="b-colorgrid__cell" v-for="(cell, index) in response" :key="index">
         <div class="b-colorgrid__cell_color" :style="{ backgroundColor: cell.hex }"></div>

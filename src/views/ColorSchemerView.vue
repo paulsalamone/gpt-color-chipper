@@ -58,12 +58,77 @@ const handleSubmit = () => {
         { role: 'system', content: 'Hello there, how may I assist you today?' },
         {
           role: 'user',
-          content: `Without additional commentary or explanation, please create only a RFC8259 compliant JSON object with five objects, each with the following properties:
-[{
-  "hex": "a hex color you associate with the term '${promptText.value}'.",
-  "name": "a two-word color name you associate with that hex color. Please use weirder, more unusual color names, i.e. 'seafoam sage' instead of 'green', or 'torrid magenta' instead of 'hot pink'. Do not repeat a name used in any of the other objects.",
-  "explanation": "An one-sentence explanation for why you chose that color and name.
-}]`
+          content: `Please provide a JSON object with five objects, each with the following properties:
+          [{
+            "hex": "a hex color you associate with the term '${promptText.value}'.",
+            "name": "a two-word color name you associate with that hex color. Please use weirder, more unusual color names, i.e. 'seafoam sage' instead of 'green', or 'torrid magenta' instead of 'hot pink'. Do not repeat a name used in any of the other objects.",
+            "explanation": "An one-sentence explanation for why you chose that color and name.
+          }]
+          
+          Example of how your response should be formmatted:
+         [
+{
+"hex": "#FFD700",
+"name": "luminous gold",
+"explanation": "I chose this color and name because it reminds me of the radiant glow of the sun at its peak."
+},
+{
+"hex": "#FF4500",
+"name": "blazing tangerine",
+"explanation": "This color and name represents the intense and fiery energy emitted by the sun during sunset."
+},
+{
+"hex": "#FFA500",
+"name": "solar flare",
+"explanation": "I associate this color and name with the sun's powerful bursts of energy and vibrant warmth."
+},
+{
+"hex": "#FF7F50",
+"name": "coral ember",
+"explanation": "This color and name captures the essence of the sun's gentle and captivating evening glow."
+},
+{
+"hex": "#FF8C00",
+"name": "radiant saffron",
+"explanation": "I chose this color and name because it reflects the sun's vibrant and captivating presence in the sky."
+}
+]
+
+          `
+          //           content: `Please return a JSON object with the following items (and please be sure that all keys and values are in double quotes):
+
+          // an object containing three items:
+          // 1. hex: a hex color you associate with the term "${promptText.value}".
+          // 2. name: a word you associate with that hex color. Please use weirder, more unusual color names, i.e. 'seafoam sage' instead of 'green', or 'torrid magenta' instead of 'hot pink'. Do not repeat a name used in any of the other objects.
+          // 3. explanation: An one-sentence explanation for why you chose that color and name.
+
+          // an object containing three items:
+          // 1. hex: a hex color you associate with the term "${promptText.value}"
+          // 2. name: a word you associate with that hex color. Please use weirder, more unusual color names, i.e. 'seafoam sage' instead of 'green', or 'torrid magenta' instead of 'hot pink'. Do not repeat a name used in any of the other objects.
+          // 3. explanation: An one-sentence explanation for why you chose that color and name.
+
+          // an object containing three items:
+          // 1. hex: a hex color you associate with the term "${promptText.value}"
+          // 2. name: a word you associate with that hex color. Please use weirder, more unusual color names, i.e. 'seafoam sage' instead of 'green', or 'torrid magenta' instead of 'hot pink'. Do not repeat a name used in any of the other objects.
+          // 3. explanation: An one-sentence explanation for why you chose that color and name.
+
+          // an object containing three items:
+          // 1. hex: a hex color you associate with the term "${promptText.value}"
+          // 2. name: one word you associate with that hex colorPlease use weirder, more unusual color names, i.e. 'seafoam sage' instead of 'green', or 'torrid magenta' instead of 'hot pink'. Do not repeat a name used in any of the other objects.
+          // 3. explanation: An one-sentence explanation for why you chose that color and name.
+
+          // an object containing three items:
+          // 1. hex: a hex color you associate with the term "${promptText.value}"
+          // 2. name: a word you associate with that hex colorPlease use weirder, more unusual color names, i.e. 'seafoam sage' instead of 'green', or 'torrid magenta' instead of 'hot pink'. Do not repeat a name used in any of the other objects.
+          // 3. explanation: An one-sentence explanation for why you chose that color and name.
+          // .
+          // `
+          //           content: `Without additional commentary or explanation, please create only a RFC8259 compliant JSON object with five objects, each with the following properties:
+          // [{
+          //   "hex": "a hex color you associate with the term '${promptText.value}'.",
+          //   "name": "a two-word color name you associate with that hex color. Please use weirder, more unusual color names, i.e. 'seafoam sage' instead of 'green', or 'torrid magenta' instead of 'hot pink'. Do not repeat a name used in any of the other objects.",
+          //   "explanation": "An one-sentence explanation for why you chose that color and name.
+          // }]`
         }
       ],
       temperature: 0.1,
