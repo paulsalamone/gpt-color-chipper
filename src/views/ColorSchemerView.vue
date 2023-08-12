@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>COLOR SCHEMER</h2>
+    <h2>COLOR SCHEMER!</h2>
     <p>
       This is a tool to help you generate color schemes based on words. It uses the OpenAI API to
       generate color schemes based on words you enter. It returns a JSON object with six colors,
