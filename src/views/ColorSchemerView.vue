@@ -4,8 +4,9 @@
       <input type="text" v-model="promptText" placeholder="enter suggestion" />
       <button>submit</button>
     </form>
+    <p>{{ apiResponse }}</p>
     <!-- FAKE RESPONSE - DEBUGGING ONLY! -->
-    <div class="response-block">
+    <!-- <div class="response-block">
       <h2 class="suggestion">Suggestion: <span class="prompt">"Sun"</span></h2>
       <div class="colorgrid">
         <div class="cell" v-for="(cell, index) in fakeResponse" :key="index">
@@ -14,7 +15,7 @@
           <p class="cell-hex">{{ cell.hex }}</p>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <div class="response-block">
       <div v-if="loading">
@@ -62,17 +63,19 @@ const handleSubmit = () => {
 
     const openai = new OpenAIApi(configuration)
 
+    // "explanation": "An one-sentence explanation for why you chose that color and name.
+
     const response = await openai.createChatCompletion({
       model: 'gpt-3.5-turbo',
       messages: [
         { role: 'system', content: 'Hello there, how may I assist you today?' },
         {
           role: 'user',
-          content: `Please provide a JSON object with five objects, each with the following properties:
+          content: `Without commentary before or after, please provide a RFC8259 compliant JSON object with five objects, each with the following properties:
           [{
             "hex": "a hex color you associate with the term '${promptText.value}'.",
             "name": "a two-word color name you associate with that hex color. Please use weirder, more unusual color names, i.e. 'seafoam sage' instead of 'green', or 'torrid magenta' instead of 'hot pink'. Do not repeat a name used in any of the other objects.",
-            "explanation": "An one-sentence explanation for why you chose that color and name.
+
           }]
           
           Example of how your response should be formmatted:
@@ -80,31 +83,27 @@ const handleSubmit = () => {
 {
 "hex": "",
 "name": "",
-"explanation": ""
 },
 {
 {
 "hex": "",
 "name": "",
-"explanation": ""
 },
 {
 "hex": "",
 "name": "",
-"explanation": ""
+
 },
 {
 "hex": "",
 "name": "",
-"explanation": ""
 },
 {
 "hex": "",
 "name": "",
-"explanation": ""
 }
 ]
-
+... Be sure to only return a RFC8259 compliant JSON object.
           `
         }
       ],
@@ -115,7 +114,7 @@ const handleSubmit = () => {
     // parse values and set to reactive states
     apiResponse.value = response.data.choices[0].message.content
     responseParsed.value = JSON.parse(apiResponse.value)
-    apiResponse.value = ''
+    // apiResponse.value = ''
     console.log('RESPONSE:', responseParsed.value)
 
     promptProp.value = promptText.value
@@ -185,8 +184,10 @@ button {
 
 .colorgrid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  height: 300px;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  max-width: 100%;
+  /* height: 300px; */
   margin-top: 1rem;
   padding: 1rem;
   grid-gap: 1rem;
