@@ -4,18 +4,6 @@
       <input type="text" v-model="promptText" placeholder="enter suggestion" />
       <button>submit</button>
     </form>
-    <p>{{ apiResponse }}</p>
-    <!-- FAKE RESPONSE - DEBUGGING ONLY! -->
-    <!-- <div class="response-block">
-      <h2 class="suggestion">Suggestion: <span class="prompt">"Sun"</span></h2>
-      <div class="colorgrid">
-        <div class="cell" v-for="(cell, index) in fakeResponse" :key="index">
-          <div class="cell-color" :style="{ backgroundColor: cell.hex }"></div>
-          <p class="cell-name">{{ cell.name }}</p>
-          <p class="cell-hex">{{ cell.hex }}</p>
-        </div>
-      </div>
-    </div> -->
 
     <div class="response-block">
       <div v-if="loading">
@@ -26,9 +14,23 @@
       <div v-else>
         <div v-if="responseParsed">
           <h2 class="suggestion">
-            Suggestion: <span class="prompt">"{{ promptProp }}"</span>
+            Your prompt: <span class="prompt">"{{ promptProp }}"</span>
           </h2>
           <div class="colorgrid">
+            <div class="cell" v-for="(cell, index) in responseParsed" :key="index">
+              <div class="cell-color" :style="{ backgroundColor: cell.hex }"></div>
+              <p class="cell-name">{{ cell.name }}</p>
+              <p class="cell-hex">{{ cell.hex }}</p>
+            </div>
+          </div>
+        </div>
+        <br /><br />
+        <!-- 3/2 COLUMN -->
+        <div v-if="responseParsed">
+          <h2 class="suggestion2">
+            Your prompt: <span class="prompt">"{{ promptProp }}"</span>
+          </h2>
+          <div class="colorgrid2">
             <div class="cell" v-for="(cell, index) in responseParsed" :key="index">
               <div class="cell-color" :style="{ backgroundColor: cell.hex }"></div>
               <p class="cell-name">{{ cell.name }}</p>
@@ -51,6 +53,10 @@ const responseParsed = ref(null)
 const promptText = ref('')
 const promptProp = ref('')
 const loading = ref(false)
+function cleanBrokenJSON(jsonStr) {
+  // Use regular expression to replace instances of comma followed by spaces (if any) and then a closing bracket or brace
+  return jsonStr.replace(/,\s*([\]}])/g, '$1')
+}
 
 const handleSubmit = () => {
   loading.value = true
@@ -74,7 +80,7 @@ const handleSubmit = () => {
           content: `Without commentary before or after, please provide a RFC8259 compliant JSON object with five objects, each with the following properties:
           [{
             "hex": "a hex color you associate with the term '${promptText.value}'.",
-            "name": "a two-word color name you associate with that hex color. Please use weirder, more unusual color names, i.e. 'seafoam sage' instead of 'green', or 'torrid magenta' instead of 'hot pink'. Do not repeat a name used in any of the other objects.",
+            "name": "a two-word color name you associate with that hex color. Please use weirder, more unusual color names that have something to do with the term '${promptText.value}', i.e. 'seafoam sage' instead of 'green', or 'torrid magenta' instead of 'hot pink'. Do not repeat a name used in any of the other objects.",
 
           }]
           
@@ -112,7 +118,7 @@ const handleSubmit = () => {
     })
 
     // parse values and set to reactive states
-    apiResponse.value = response.data.choices[0].message.content
+    apiResponse.value = cleanBrokenJSON(response.data.choices[0].message.content)
     responseParsed.value = JSON.parse(apiResponse.value)
     // apiResponse.value = ''
     console.log('RESPONSE:', responseParsed.value)
@@ -146,6 +152,7 @@ button {
 
 .response-block {
   margin-top: 3rem;
+  /* width: 800px; */
 }
 
 .loader {
@@ -176,6 +183,18 @@ button {
   font-weight: 300;
   text-transform: capitalize;
   border-bottom: 2px solid black;
+  width: 970px;
+}
+
+.suggestion2 {
+  margin-top: 2rem;
+  width: 100%;
+  padding: 5px 0 4px;
+  font-size: 2rem;
+  font-weight: 300;
+  text-transform: capitalize;
+  border-bottom: 2px solid black;
+  width: 730px;
 }
 
 .suggestion .prompt {
@@ -184,6 +203,18 @@ button {
 
 .colorgrid {
   display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  /* grid-template-rows: repeat(2, 1fr); */
+  max-width: 100%;
+  /* height: 300px; */
+  margin-top: 1rem;
+  padding: 1rem;
+  grid-gap: 1rem;
+  width: 750px;
+}
+
+.colorgrid2 {
+  display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 1fr);
   max-width: 100%;
@@ -191,6 +222,7 @@ button {
   margin-top: 1rem;
   padding: 1rem;
   grid-gap: 1rem;
+  width: 750px;
 }
 
 .cell {
